@@ -1,13 +1,26 @@
 import yfinance as yf
-import telegram
 from finta import TA
+from keras.models import load_model
+import pickle
+import datetime as dt
+import requests
+import schedule
+import time
+from tqdm import tqdm
+import numpy as np
+import matplotlib.pyplot as plt
 
-# 設定Telegram機器人的TOKEN和聊天室ID
-bot_token = 'your_bot_token'
-chat_id = 'your_chat_id'
+def send_to_telegram(message):
+    apiToken = '5850662274:AAGeKZqM1JfQfh3CrSKG6BZ9pEvDajdBUqs'
+    chatID = '1567262377'
+    apiURL = f'https://api.telegram.org/bot{apiToken}/sendMessage'
+    try:
+        response = requests.post(apiURL, json={'chat_id': chatID, 'text': message})
+        print(response.text)
+    except Exception as e:
+        print(e)
 
 def process(df,min_max_scaler,model):
-    # 計算技術指標特徵
     df['RSI'] = TA.RSI(df)#1
     df['Williams %R'] = TA.WILLIAMS(df)#2
     df['SMA'] = TA.SMA(df)#3
@@ -25,12 +38,11 @@ def process(df,min_max_scaler,model):
     df['SAR'] = TA.SAR(df)#15
     df = df.dropna(axis=0)
     features = df.columns[-15:].tolist()
+    Close = df[['Close']]
     df = df[features]
-    
-    # minmax scaler
-    df = min_max_scaler.transform(df)
-    
-    # 製作Xs
+    # 數值轉換
+    df[features] = min_max_scaler.transform(df[features])
+    # 製作X
     days = 15
     start_index = 0
     end_index = len(df)-days
@@ -42,43 +54,40 @@ def process(df,min_max_scaler,model):
         Xs.append(X)
         indexs.append((df.iloc[[i]].index,df.iloc[[i+days-1]].index))
     Xs = np.array(Xs)
+    # 模型預測
+    answer = model.predict(Xs)
+    answer = [ np.argmax(i) for i in answer]
     
-    # 模型預測 
-    ys = model.predict(Xs)
-    signal = np.argmax(ys[-1])
+    # 繪圖
+    '''
+    Close = Close.iloc[-len(Xs):,:]
+    Close['SIGNAL'] = answer
+    buy = Close[Close['SIGNAL']==1]['Close']
+    sell = Close[Close['SIGNAL']==2]['Close']
+    Close['Close'].plot()
+    plt.scatter(list(buy.index),list(buy.values),color='red',marker="^")
+    plt.scatter(list(sell.index),list(sell.values),color='green',marker='v')
+    plt.show()
+    '''
     
-    # 返回訊號
-    return signal
-
-def send_to_telegram(message):
-    # 初始化Telegram機器人
-    bot = telegram.Bot(token=bot_token)
-    # 傳送訊息到指定聊天室
-    bot.send_message(chat_id=chat_id, text=message)
+    return answer[-1]
 
 def main():
-    # keras載入模型
-    'model = '
-    
-    # 載入minmaxscaler
-    'minmaxscaler = '
-    
-    # 使用yf.download和 symbol 取得近期60天'^TWII'的資料稱之為df
-    'df = '
-    
-    # 將資料傳入預處理函式，得到買賣訊號
+    model = load_model('model.h5')
+    with open('scaler.pkl', 'rb') as f:
+        min_max_scaler = pickle.load(f)
+    start_date = (dt.datetime.now() - dt.timedelta(days=180)).strftime("%Y-%m-%d")
+    end_date = dt.datetime.now().strftime("%Y-%m-%d")
+    df = yf.download('^TWII', start=start_date, end=end_date)
     signal = process(df,min_max_scaler,model)
-    
-    # 根據買賣訊號發送Telegram訊息
     if signal == 0:
         send_to_telegram('不動作')
-    elif signal == 1:
+    if signal == 1:
         send_to_telegram('買進')
-    else:
+    if signal == 2:
         send_to_telegram('賣出')
 
 if __name__ == '__main__':
-    # 設定每天早上8點執行main()函式
     schedule.every().day.at('08:00').do(main)
     while True:
         schedule.run_pending()

@@ -59,7 +59,6 @@ def process(df,min_max_scaler,model):
     answer = [ np.argmax(i) for i in answer]
     
     # 繪圖
-    '''
     Close = Close.iloc[-len(Xs):,:]
     Close['SIGNAL'] = answer
     buy = Close[Close['SIGNAL']==1]['Close']
@@ -68,7 +67,6 @@ def process(df,min_max_scaler,model):
     plt.scatter(list(buy.index),list(buy.values),color='red',marker="^")
     plt.scatter(list(sell.index),list(sell.values),color='green',marker='v')
     plt.show()
-    '''
     
     return answer[-1]
 
@@ -77,6 +75,7 @@ def main():
     with open('scaler.pkl', 'rb') as f:
         min_max_scaler = pickle.load(f)
     start_date = (dt.datetime.now() - dt.timedelta(days=180)).strftime("%Y-%m-%d")
+    #end_date = (dt.datetime.now() - dt.timedelta(days=365*14+180)).strftime("%Y-%m-%d")
     end_date = dt.datetime.now().strftime("%Y-%m-%d")
     df = yf.download('^TWII', start=start_date, end=end_date)
     signal = process(df,min_max_scaler,model)
@@ -88,9 +87,10 @@ def main():
         send_to_telegram('賣出')
 
 if __name__ == '__main__':
+    main()
+    '''
     schedule.every().day.at('08:00').do(main)
     while True:
         schedule.run_pending()
         time.sleep(1)
-
-根據以上程式碼產生英文版本的README.MD
+    '''

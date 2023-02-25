@@ -92,3 +92,5 @@ if __name__ == '__main__':
     while True:
         schedule.run_pending()
         time.sleep(1)
+
+根據以上程式碼產生英文版本的README.MD

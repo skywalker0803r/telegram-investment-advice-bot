@@ -74,8 +74,7 @@ def main():
     model = load_model('model.h5')
     with open('scaler.pkl', 'rb') as f:
         min_max_scaler = pickle.load(f)
-    start_date = (dt.datetime.now() - dt.timedelta(days=180)).strftime("%Y-%m-%d")
-    #end_date = (dt.datetime.now() - dt.timedelta(days=365*14+180)).strftime("%Y-%m-%d")
+    start_date = (dt.datetime.now() - dt.timedelta(days=365)).strftime("%Y-%m-%d")
     end_date = dt.datetime.now().strftime("%Y-%m-%d")
     df = yf.download('^TWII', start=start_date, end=end_date)
     signal = process(df,min_max_scaler,model)

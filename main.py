@@ -9,6 +9,7 @@ import time
 from tqdm import tqdm
 import numpy as np
 import matplotlib.pyplot as plt
+#https://sharegpt.com/c/kZOYTX1
 
 def send_to_telegram(message):
     apiToken = '5850662274:AAGeKZqM1JfQfh3CrSKG6BZ9pEvDajdBUqs'

@@ -29,3 +29,6 @@ To run the program, simply execute the main.py file. This will start the trading
 The program first downloads historical price data using the yfinance library. It then calculates several technical indicators using the finta library, such as RSI, Williams %R, SMA, EMA, WMA, HMA, TEMA, CCI, CMO, MACD, PPO, ROC, CFI, DMI, and SAR.
 
 Next, the program scales the indicator data using a MinMax scaler and feeds it into a deep learning model trained with Keras. The model predicts the recommended action (buy, sell or hold) based on the indicator data then push message to telegram.
+
+## refer to Algorithmic_Financial_Trading_with_Deep_Convolutional_Neural_Networks_Time_Series_to_Image_Conversion_Approach
+https://www.researchgate.net/profile/Omer-Sezer/publication/324802031_Algorithmic_Financial_Trading_with_Deep_Convolutional_Neural_Networks_Time_Series_to_Image_Conversion_Approach/links/5ae4ade9a6fdcc3bea95d2fd/Algorithmic-Financial-Trading-with-Deep-Convolutional-Neural-Networks-Time-Series-to-Image-Conversion-Approach.pdf

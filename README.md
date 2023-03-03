@@ -19,7 +19,7 @@ This project requires Python 3 and the following libraries:
 *matplotlib
 You can install these libraries using pip by running:
 
-Copy code
+Copy code:
 "pip install -r requirements.txt"
 
 ## Running the Program
@@ -28,4 +28,4 @@ To run the program, simply execute the main.py file. This will start the trading
 ## How It Works
 The program first downloads historical price data using the yfinance library. It then calculates several technical indicators using the finta library, such as RSI, Williams %R, SMA, EMA, WMA, HMA, TEMA, CCI, CMO, MACD, PPO, ROC, CFI, DMI, and SAR.
 
-Next, the program scales the indicator data using a MinMax scaler and feeds it into a deep learning model trained with Keras. The model predicts the recommended action (buy, sell or hold) based on the indicator data
+Next, the program scales the indicator data using a MinMax scaler and feeds it into a deep learning model trained with Keras. The model predicts the recommended action (buy, sell or hold) based on the indicator data then push message to telegram.

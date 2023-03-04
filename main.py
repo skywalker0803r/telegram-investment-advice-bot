@@ -1,4 +1,4 @@
-#https://sharegpt.com/c/kZOYTX1
+#此份檔案程式碼主要架構參考自chatgpt:https://sharegpt.com/c/kZOYTX1
 import yfinance as yf
 from finta import TA
 from keras.models import load_model

@@ -1,4 +1,19 @@
 #此份檔案程式碼主要架構參考自chatgpt:https://sharegpt.com/c/kZOYTX1
+'''
+幫我寫一個程式功能如下:
+有一個函數叫send_to_telegram(message)用來發送message
+有一個函數叫process(df,min_max_scaler,model)用來根據輸入的參數產生交易信號
+有一個函數叫main()此做幾件事情:
+1.載入model.h5模型
+2.載入scaler.pkl
+3.使用yfinance取得最近180天^TWII資料稱為df
+4.套用process(df,min_max_scaler,model)取得signal
+5.當signal == 0,send_to_telegram('不動作')
+6.當signal == 1,send_to_telegram('買進')
+7.當signal == 2,send_to_telegram('賣出')
+
+使用schedule套件讓這個程式每天早上8點執行一次
+'''
 import yfinance as yf
 from finta import TA
 from keras.models import load_model

@@ -120,7 +120,8 @@ def main():
 
 if __name__ == '__main__':
     main()
-    schedule.every().day.at('08:00').do(main)#每日八點準時執行
-    while True:
-        schedule.run_pending()
-        time.sleep(1)
+    # 如果你有local python環境或是上雲端python環境可以使用以下代碼讓他定時執行main()函數
+    #schedule.every().day.at('08:00').do(main)#每日八點準時執行
+    #while True:
+    #    schedule.run_pending()
+    #    time.sleep(1)

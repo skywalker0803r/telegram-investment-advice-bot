@@ -97,7 +97,7 @@ def process(df,min_max_scaler,model):
 
 def main():
     # 載入模型和scaler
-    model = load_model('model.h5')
+    model = load_model('model_V2.h5')
     with open('scaler.pkl', 'rb') as f:
         min_max_scaler = pickle.load(f)
     # 資料時間範圍設定
